@@ -16,7 +16,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
-  base: "./",
+  base: process.env.NODE_ENV === 'production' ? "/codenex-is-not-us/" : "/",
   build: {
     outDir: "dist",
     assetsDir: "assets",
