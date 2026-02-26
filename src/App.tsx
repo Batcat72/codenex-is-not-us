@@ -932,8 +932,8 @@ const Dashboard: React.FC<any> = ({ setActiveTab }) => {
               <div className={`w-12 h-12 bg-gradient-to-r ${stat.color} rounded-lg flex items-center justify-center mb-3`}>
                 {stat.icon}
               </div>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <div className="text-sm text-blue-100">{stat.label}</div>
+              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+              <div className="text-sm text-gray-800 font-medium">{stat.label}</div>
             </motion.div>
           ))}
         </div>
