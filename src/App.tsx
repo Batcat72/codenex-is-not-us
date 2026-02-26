@@ -2654,12 +2654,12 @@ const CommunityChat: React.FC = () => {
 // MAIN APP
 // ============================================
 
+const queryClient = new QueryClient();
+
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-
-  const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
