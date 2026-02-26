@@ -19,6 +19,15 @@ declare module 'axios';
 declare module '@tailwindcss/vite';
 declare module 'vite-plugin-singlefile';
 
+interface ImportMetaEnv {
+  readonly VITE_FINNHUB_API_KEY: string;
+  // Add more environment variables here as needed
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 declare module '*.css';
 declare module '*.svg';
 declare module '*.png';

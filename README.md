@@ -7,6 +7,7 @@ A modern web application built with React, Vite, TypeScript, and Tailwind CSS th
 - **Stock Prediction**: AI-driven stock market predictions
 - **Portfolio Analysis**: Comprehensive portfolio management and analysis
 - **Learning Modules**: Interactive finance education content
+- **News Intelligence**: Real-time market news with AI-powered sentiment analysis using Finnhub API
 - **Investment Intelligence**: Real-time market insights and recommendations
 
 ## 🛠️ Tech Stack
@@ -27,15 +28,44 @@ A modern web application built with React, Vite, TypeScript, and Tailwind CSS th
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/finEdu-ai.git
-cd finEdu-ai
+git clone https://github.com/Batcat72/codenex-is-not-us.git
+cd codenex-is-not-us
 
 # Install dependencies
 npm install
 
+# Set up environment variables
+cp .env.example .env
+# Edit .env file and add your Finnhub API key
+
 # Start development server
 npm run dev
 ```
+
+## 🔧 Environment Configuration
+
+### Finnhub API Setup
+
+1. **Get API Key**: Sign up for a free account at [Finnhub.io](https://finnhub.io/) and get your API key
+2. **Configure Environment**: Copy `.env.example` to `.env` and add your API key:
+
+```bash
+# Create .env file from example
+cp .env.example .env
+
+# Edit .env file
+VITE_FINNHUB_API_KEY=your_finnhub_api_key_here
+```
+
+3. **Restart Development Server**: After setting up the environment variables, restart your development server
+
+### Available News Categories
+
+The News Intelligence section supports the following categories:
+- **General News**: General market news
+- **Forex News**: Foreign exchange market news
+- **Crypto News**: Cryptocurrency market news
+- **M&A News**: Mergers and acquisitions news
 
 ## 🏗️ Build & Deployment
 

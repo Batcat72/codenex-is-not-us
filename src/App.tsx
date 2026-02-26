@@ -20,6 +20,7 @@ import {
   BarChart as BarChartIcon, Sun, Moon, Home, GraduationCap,
   BrainCircuit, Newspaper, MessageCircle, ShieldCheck, Rocket
 } from 'lucide-react';
+import { finnhubService } from './services/finnhub';
 
 // ============================================
 // TYPES & INTERFACES
@@ -1738,9 +1739,30 @@ const PredictionPlayground: React.FC = () => {
 // ============================================
 
 const NewsIntelligence: React.FC = () => {
-  const news = generateNewsData();
-  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+  const [news, setNews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedNews, setSelectedNews] = useState<any | null>(null);
   const [sentimentFilter, setSentimentFilter] = useState<'all' | 'positive' | 'neutral' | 'negative'>('all');
+  const [newsCategory, setNewsCategory] = useState<'general' | 'forex' | 'crypto' | 'merger'>('general');
+
+  useEffect(() => {
+    fetchNews();
+  }, [newsCategory]);
+
+  const fetchNews = async () => {
+    setLoading(true);
+    try {
+      const finnhubNews = await finnhubService.getMarketNews(newsCategory);
+      const formattedNews = finnhubService.convertFinnhubNewsToAppFormat(finnhubNews);
+      setNews(formattedNews);
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      // Fallback to mock data if API fails
+      setNews(generateNewsData());
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredNews = news.filter(n => 
     sentimentFilter === 'all' || n.sentimentLabel === sentimentFilter
@@ -1755,18 +1777,36 @@ const NewsIntelligence: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">News Intelligence</h1>
           <p className="text-gray-600 mt-1">AI-powered sentiment analysis & market impact</p>
         </div>
-        <Button>
-          <RefreshCw className="w-5 h-5 mr-2" />
-          Refresh
-        </Button>
+        <div className="flex items-center space-x-3">
+          <select
+            value={newsCategory}
+            onChange={(e) => setNewsCategory(e.target.value as any)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="general">General News</option>
+            <option value="forex">Forex News</option>
+            <option value="crypto">Crypto News</option>
+            <option value="merger">M&A News</option>
+          </select>
+          <Button onClick={fetchNews} disabled={loading}>
+            <RefreshCw className={`w-5 h-5 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
       </div>
 
-      <div className="grid lg:grid-cols-4 gap-6">
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
+          <span className="ml-3 text-gray-600">Loading latest news...</span>
+        </div>
+      ) : (
+        <div className="grid lg:grid-cols-4 gap-6">
         {/* News Feed */}
         <div className="lg:col-span-3 space-y-4">
           {/* Filter Tabs */}
@@ -1816,7 +1856,7 @@ const NewsIntelligence: React.FC = () => {
                       <p className="text-sm text-gray-600 mb-3">{item.summary}</p>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          {item.relatedStocks.map((stock) => (
+                          {item.relatedStocks.map((stock: any) => (
                             <Badge key={stock}>{stock}</Badge>
                           ))}
                         </div>
@@ -1892,7 +1932,7 @@ const NewsIntelligence: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {item.relatedStocks.slice(0, 2).map((stock) => (
+                    {item.relatedStocks.slice(0, 2).map((stock: any) => (
                       <Badge key={stock} variant="default">{stock}</Badge>
                     ))}
                   </div>
@@ -1927,7 +1967,8 @@ const NewsIntelligence: React.FC = () => {
           </Card>
         </div>
       </div>
-
+      )}
+      
       {/* News Detail Modal */}
       <Modal
         isOpen={!!selectedNews}
@@ -1964,7 +2005,7 @@ const NewsIntelligence: React.FC = () => {
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">Related Stocks</h4>
               <div className="flex flex-wrap gap-2">
-                {selectedNews.relatedStocks.map((stock) => (
+                {selectedNews.relatedStocks.map((stock: any) => (
                   <Badge key={stock} variant="info">{stock}</Badge>
                 ))}
               </div>
