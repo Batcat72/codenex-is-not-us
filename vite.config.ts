@@ -10,13 +10,13 @@ const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), viteSingleFile()],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
     },
   },
-  base: "/finEdu-ai/",
+  base: "/codenex-is-not-us/",
   build: {
     outDir: "dist",
     assetsDir: "assets",
