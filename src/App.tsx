@@ -1752,9 +1752,24 @@ const NewsIntelligence: React.FC = () => {
   const fetchNews = async () => {
     setLoading(true);
     try {
+      // Check if API key is available
+      const apiKey = import.meta.env.VITE_FINNHUB_API_KEY;
+      if (!apiKey) {
+        console.warn('No API key found, using mock data');
+        setNews(generateNewsData());
+        return;
+      }
+
       const finnhubNews = await finnhubService.getMarketNews(newsCategory);
       const formattedNews = finnhubService.convertFinnhubNewsToAppFormat(finnhubNews);
-      setNews(formattedNews);
+      
+      // Ensure we have news data
+      if (formattedNews.length === 0) {
+        console.warn('No news received, using mock data');
+        setNews(generateNewsData());
+      } else {
+        setNews(formattedNews);
+      }
     } catch (error) {
       console.error('Error fetching news:', error);
       // Fallback to mock data if API fails

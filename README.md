@@ -88,9 +88,19 @@ This project is configured for automatic deployment to GitHub Pages. The build p
 
 ### GitHub Pages (Recommended)
 
-1. Push your code to GitHub
-2. Enable GitHub Pages in repository settings
-3. Select source as "Deploy from a branch" and choose `gh-pages` branch
+1. **Set up GitHub Secrets**:
+   - Go to your repository on GitHub
+   - Navigate to Settings → Secrets and variables → Actions
+   - Click "New repository secret"
+   - Add `FINNHUB_API_KEY` with your Finnhub API key
+
+2. **Push to GitHub**:
+   - The GitHub Actions will automatically deploy your site
+   - The API key will be securely injected during build
+
+3. **Enable GitHub Pages**:
+   - Go to repository Settings → Pages
+   - Select source as "GitHub Actions"
 
 ## 📁 Project Structure
 
