@@ -16,7 +16,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
-  base: "/codenex-is-not-us/",
+  base: "./",
   build: {
     outDir: "dist",
     assetsDir: "assets",
