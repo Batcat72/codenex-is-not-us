@@ -1745,36 +1745,38 @@ const NewsIntelligence: React.FC = () => {
   const [selectedNews, setSelectedNews] = useState<any | null>(null);
   const [sentimentFilter, setSentimentFilter] = useState<'all' | 'positive' | 'neutral' | 'negative'>('all');
   const [newsCategory, setNewsCategory] = useState<'general' | 'forex' | 'crypto' | 'merger'>('general');
-  const [alerts, setAlerts] = useState<MarketAlert[]>([]);
+  // Temporarily disable alerts to fix blank page
+  // const [alerts, setAlerts] = useState<MarketAlert[]>([]);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
-  // Auto-refresh every 20 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchNews();
-    }, 20000);
+  // Temporarily disable auto-refresh to fix blank page
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetchNews();
+  //   }, 20000);
 
-    return () => clearInterval(interval);
-  }, [newsCategory]);
+  //   return () => clearInterval(interval);
+  // }, [newsCategory]);
 
-  // Detect alerts whenever news updates
-  useEffect(() => {
-    if (news.length > 0) {
-      try {
-        const detectedAlerts = AlertDetector.detectAlerts(news);
-        // Limit to 3 most recent alerts
-        const limitedAlerts = detectedAlerts.slice(0, 3);
-        setAlerts(limitedAlerts);
-      } catch (error) {
-        console.error('Error detecting alerts:', error);
-        setAlerts([]);
-      }
-    }
-  }, [news]);
+  // Temporarily disable alerts to fix blank page
+  // useEffect(() => {
+  //   if (news.length > 0) {
+  //     try {
+  //       const detectedAlerts = AlertDetector.detectAlerts(news);
+  //       // Limit to 3 most recent alerts
+  //       const limitedAlerts = detectedAlerts.slice(0, 3);
+  //       setAlerts(limitedAlerts);
+  //     } catch (error) {
+  //       console.error('Error detecting alerts:', error);
+  //       setAlerts([]);
+  //     }
+  //   }
+  // }, [news]);
 
-  const dismissAlert = (alertId: string) => {
-    setAlerts(prev => prev.filter(alert => alert.id !== alertId));
-  };
+  // Temporarily disable alerts to fix blank page
+  // const dismissAlert = (alertId: string) => {
+  //   setAlerts(prev => prev.filter(alert => alert.id !== alertId));
+  // };
 
   useEffect(() => {
     fetchNews();
@@ -1829,8 +1831,8 @@ const NewsIntelligence: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Floating Alert Notifications */}
-      <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
+      {/* Temporarily disable alerts to fix blank page */}
+      {/* <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
         {alerts.map((alert, index) => (
           <motion.div
             key={alert.id}
@@ -1873,7 +1875,7 @@ const NewsIntelligence: React.FC = () => {
             </div>
           </motion.div>
         ))}
-      </div>
+      </div> */}
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
