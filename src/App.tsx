@@ -892,7 +892,7 @@ const Navigation: React.FC<{ activeTab: string; onTabChange: (tab: string) => vo
 // DASHBOARD
 // ============================================
 
-const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({ setActiveTab }) => {
+const Dashboard: React.FC<any> = ({ setActiveTab }) => {
   const { user } = useAuth();
   const courses = generateCourses();
   const portfolio = generatePortfolio();
