@@ -2154,7 +2154,7 @@ const PortfolioAnalyzer: React.FC = () => {
 // AI ADVISOR
 // ============================================
 
-const AIAvisor: React.FC = () => {
+const AIAdvisor: React.FC = () => {
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([
     { role: 'assistant', content: 'Hello! I\'m your AI Financial Advisor. I can help you with:\n\n• Portfolio analysis and recommendations\n• Investment strategies\n• Market insights\n• Risk assessment\n• Educational explanations\n\nWhat would you like to know?' }
   ]);
@@ -2817,7 +2817,7 @@ const AppContent: React.FC<AppContentProps> = ({
             {activeTab === 'prediction' && <PredictionPlayground />}
             {activeTab === 'news' && <NewsIntelligence />}
             {activeTab === 'portfolio' && <PortfolioAnalyzer />}
-            {activeTab === 'advisor' && <AIAvisor />}
+            {activeTab === 'advisor' && <AIAdvisor />}
             {activeTab === 'community' && <CommunityChat />}
           </motion.div>
         </AnimatePresence>
