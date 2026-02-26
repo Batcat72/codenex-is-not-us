@@ -53,61 +53,128 @@ class FinnhubService {
 
   async getMarketNews(category: 'general' | 'forex' | 'crypto' | 'merger' = 'general'): Promise<FinnhubNewsItem[]> {
     try {
-      // In production, we need to handle CORS by using a proxy or fallback
-      const isProduction = import.meta.env.PROD;
+      // For GitHub Pages, we need to use a public CORS proxy or fallback
+      const apiUrl = `${FINNHUB_BASE_URL}/news?category=${category}&token=${this.apiKey}`;
       
-      if (isProduction) {
-        // For GitHub Pages, we'll use a CORS proxy or fallback to mock data
+      // Try multiple CORS proxies in order
+      const proxies = [
+        `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`,
+        `https://cors-anywhere.herokuapp.com/${apiUrl}`
+      ];
+
+      for (const proxyUrl of proxies) {
         try {
-          const response = await axios.get(`https://api.allorigins.win/get?url=${encodeURIComponent(`${FINNHUB_BASE_URL}/news?category=${category}&token=${this.apiKey}`)}`);
-          const data = JSON.parse(response.data.contents);
-          return data;
-        } catch (corsError) {
-          console.warn('CORS proxy failed, using fallback data');
-          return this.getFallbackNews();
+          console.log(`Trying proxy: ${proxyUrl}`);
+          const response = await axios.get(proxyUrl, {
+            timeout: 10000,
+            headers: {
+              'Origin': window.location.origin
+            }
+          });
+
+          // Handle different proxy response formats
+          let data;
+          if (response.data.contents) {
+            // allorigins.win format
+            data = JSON.parse(response.data.contents);
+          } else if (Array.isArray(response.data)) {
+            // Direct response or corsproxy.io
+            data = response.data;
+          } else {
+            // Try to parse as JSON
+            data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+          }
+
+          if (Array.isArray(data) && data.length > 0) {
+            console.log('Successfully fetched news via proxy');
+            return data;
+          }
+        } catch (proxyError) {
+          console.warn(`Proxy ${proxyUrl} failed:`, proxyError instanceof Error ? proxyError.message : 'Unknown error');
+          continue;
         }
-      } else {
-        // Development - direct API call
-        const response = await axios.get(`${FINNHUB_BASE_URL}/news`, {
-          params: {
-            category,
-            token: this.apiKey,
-          },
-        });
-        return response.data;
       }
+
+      // All proxies failed, use fallback
+      console.warn('All proxies failed, using fallback data');
+      return this.getFallbackNews(category);
+
     } catch (error) {
       console.error('Error fetching market news:', error);
-      return this.getFallbackNews();
+      return this.getFallbackNews(category);
     }
   }
 
-  private getFallbackNews(): FinnhubNewsItem[] {
-    // Return mock data that matches Finnhub format
-    return [
-      {
-        category: "general",
-        datetime: Math.floor(Date.now() / 1000),
-        headline: "Markets Show Mixed Signals as Investors Await Economic Data",
-        id: 1,
-        image: "https://picsum.photos/seed/news1/400/200",
-        related: "AAPL,GOOGL,MSFT",
-        source: "Financial Times",
-        summary: "Global markets displayed mixed performance as investors await key economic indicators and corporate earnings reports.",
-        url: "#"
-      },
-      {
-        category: "general", 
-        datetime: Math.floor(Date.now() / 1000) - 3600,
-        headline: "Tech Stocks Rally on AI Optimism",
-        id: 2,
-        image: "https://picsum.photos/seed/news2/400/200",
-        related: "NVDA,AMD,INTC",
-        source: "TechCrunch",
-        summary: "Technology stocks surged as artificial intelligence developments drove investor enthusiasm for semiconductor companies.",
-        url: "#"
-      }
-    ];
+  private getFallbackNews(category: string = 'general'): FinnhubNewsItem[] {
+    // Return realistic mock data based on category
+    const categoryNews = {
+      general: [
+        {
+          category: "general",
+          datetime: Math.floor(Date.now() / 1000),
+          headline: "Federal Reserve Signals Potential Rate Changes Amid Economic Uncertainty",
+          id: 1,
+          image: "https://picsum.photos/seed/fed-news/400/200",
+          related: "AAPL,GOOGL,MSFT,JPM",
+          source: "Reuters",
+          summary: "The Federal Reserve indicated possible adjustments to interest rates as economic data shows mixed signals about inflation and growth.",
+          url: "#"
+        },
+        {
+          category: "general",
+          datetime: Math.floor(Date.now() / 1000) - 1800,
+          headline: "Tech Giants Report Strong Earnings Despite Market Volatility",
+          id: 2,
+          image: "https://picsum.photos/seed/tech-earnings/400/200",
+          related: "AAPL,MSFT,GOOGL,META",
+          source: "Bloomberg",
+          summary: "Major technology companies exceeded earnings expectations, providing a boost to investor confidence in the sector.",
+          url: "#"
+        }
+      ],
+      forex: [
+        {
+          category: "forex",
+          datetime: Math.floor(Date.now() / 1000),
+          headline: "USD Strengthens Against Major Currencies Following Fed Comments",
+          id: 3,
+          image: "https://picsum.photos/seed/forex-usd/400/200",
+          related: "EUR,GBP,JPY",
+          source: "Forex.com",
+          summary: "The US dollar gained ground as Federal Reserve officials hinted at maintaining current monetary policy stance.",
+          url: "#"
+        }
+      ],
+      crypto: [
+        {
+          category: "crypto",
+          datetime: Math.floor(Date.now() / 1000),
+          headline: "Bitcoin Surges Past $45,000 as Institutional Interest Grows",
+          id: 4,
+          image: "https://picsum.photos/seed/bitcoin-rally/400/200",
+          related: "BTC,ETH,ADA",
+          source: "CoinDesk",
+          summary: "Bitcoin reached new monthly highs as major financial institutions announced increased cryptocurrency exposure.",
+          url: "#"
+        }
+      ],
+      merger: [
+        {
+          category: "merger",
+          datetime: Math.floor(Date.now() / 1000),
+          headline: "Major Tech Acquisition Deal Worth $50 Billion Announced",
+          id: 5,
+          image: "https://picsum.photos/seed/merger-deal/400/200",
+          related: "AAPL,MSFT,GOOGL",
+          source: "Wall Street Journal",
+          summary: "A significant merger agreement was announced today, potentially reshaping the competitive landscape in the technology sector.",
+          url: "#"
+        }
+      ]
+    };
+
+    return categoryNews[category as keyof typeof categoryNews] || categoryNews.general;
   }
 
   async getCompanyNews(symbol: string, from: string, to: string): Promise<FinnhubCompanyNews[]> {
