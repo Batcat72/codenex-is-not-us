@@ -1760,10 +1760,15 @@ const NewsIntelligence: React.FC = () => {
   // Detect alerts whenever news updates
   useEffect(() => {
     if (news.length > 0) {
-      const detectedAlerts = AlertDetector.detectAlerts(news);
-      // Limit to 3 most recent alerts
-      const limitedAlerts = detectedAlerts.slice(0, 3);
-      setAlerts(limitedAlerts);
+      try {
+        const detectedAlerts = AlertDetector.detectAlerts(news);
+        // Limit to 3 most recent alerts
+        const limitedAlerts = detectedAlerts.slice(0, 3);
+        setAlerts(limitedAlerts);
+      } catch (error) {
+        console.error('Error detecting alerts:', error);
+        setAlerts([]);
+      }
     }
   }, [news]);
 
@@ -1783,7 +1788,9 @@ const NewsIntelligence: React.FC = () => {
       
       if (!apiKey) {
         console.warn('No API key found, using mock data');
-        setNews(generateNewsData());
+        const mockNews = generateNewsData();
+        setNews(mockNews);
+        setLastRefresh(new Date());
         return;
       }
 
@@ -1793,7 +1800,8 @@ const NewsIntelligence: React.FC = () => {
       // Ensure we have news data
       if (formattedNews.length === 0) {
         console.warn('No news received, using mock data');
-        setNews(generateNewsData());
+        const mockNews = generateNewsData();
+        setNews(mockNews);
       } else {
         setNews(formattedNews);
       }
@@ -1801,7 +1809,9 @@ const NewsIntelligence: React.FC = () => {
     } catch (error) {
       console.error('Error fetching news:', error);
       // Fallback to mock data if API fails
-      setNews(generateNewsData());
+      const mockNews = generateNewsData();
+      setNews(mockNews);
+      setLastRefresh(new Date());
     } finally {
       setLoading(false);
     }
