@@ -1752,8 +1752,9 @@ const NewsIntelligence: React.FC = () => {
   const fetchNews = async () => {
     setLoading(true);
     try {
-      // Check if API key is available
-      const apiKey = import.meta.env.VITE_FINNHUB_API_KEY;
+      // Use fallback API key if environment variable is not available
+      const apiKey = (import.meta as any).env?.VITE_FINNHUB_API_KEY || 'd6g9gjhr01qt49322b30d6g9gjhr01qt49322b3g';
+      
       if (!apiKey) {
         console.warn('No API key found, using mock data');
         setNews(generateNewsData());

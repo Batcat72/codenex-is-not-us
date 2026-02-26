@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const FINNHUB_BASE_URL = 'https://finnhub.io/api/v1';
-const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY;
+const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY || 'd6g9gjhr01qt49322b30d6g9gjhr01qt49322b3g';
 
 export interface FinnhubNewsItem {
   category: string;
