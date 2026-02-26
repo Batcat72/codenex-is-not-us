@@ -892,7 +892,7 @@ const Navigation: React.FC<{ activeTab: string; onTabChange: (tab: string) => vo
 // DASHBOARD
 // ============================================
 
-const Dashboard: React.FC = () => {
+const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({ setActiveTab }) => {
   const { user } = useAuth();
   const courses = generateCourses();
   const portfolio = generatePortfolio();
@@ -950,7 +950,7 @@ const Dashboard: React.FC = () => {
               <p className="text-sm text-gray-500">Make your next prediction</p>
             </div>
           </div>
-          <Button className="w-full">Start Predicting</Button>
+          <Button className="w-full" onClick={() => setActiveTab('prediction')}>Start Predicting</Button>
         </Card>
 
         <Card className="p-6">
@@ -963,7 +963,7 @@ const Dashboard: React.FC = () => {
               <p className="text-sm text-gray-500">Resume your course</p>
             </div>
           </div>
-          <Button variant="secondary" className="w-full">Go to Learning</Button>
+          <Button variant="secondary" className="w-full" onClick={() => setActiveTab('learning')}>Go to Learning</Button>
         </Card>
 
         <Card className="p-6">
@@ -976,7 +976,7 @@ const Dashboard: React.FC = () => {
               <p className="text-sm text-gray-500">Get personalized advice</p>
             </div>
           </div>
-          <Button variant="outline" className="w-full">Chat Now</Button>
+          <Button variant="outline" className="w-full" onClick={() => setActiveTab('advisor')}>Chat Now</Button>
         </Card>
       </div>
 
@@ -2869,7 +2869,7 @@ const AppContent: React.FC<AppContentProps> = ({
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
           >
-            {activeTab === 'dashboard' && <Dashboard />}
+            {activeTab === 'dashboard' && <Dashboard setActiveTab={setActiveTab} />}
             {activeTab === 'learning' && <LearningModule />}
             {activeTab === 'prediction' && <PredictionPlayground />}
             {activeTab === 'news' && <NewsIntelligence />}
