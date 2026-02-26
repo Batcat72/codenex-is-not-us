@@ -21,6 +21,7 @@ import {
   BrainCircuit, Newspaper, MessageCircle, ShieldCheck, Rocket
 } from 'lucide-react';
 import { finnhubService } from './services/finnhub';
+import { AlertDetector, MarketAlert } from './utils/alertDetector';
 
 // ============================================
 // TYPES & INTERFACES
@@ -1744,6 +1745,31 @@ const NewsIntelligence: React.FC = () => {
   const [selectedNews, setSelectedNews] = useState<any | null>(null);
   const [sentimentFilter, setSentimentFilter] = useState<'all' | 'positive' | 'neutral' | 'negative'>('all');
   const [newsCategory, setNewsCategory] = useState<'general' | 'forex' | 'crypto' | 'merger'>('general');
+  const [alerts, setAlerts] = useState<MarketAlert[]>([]);
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+
+  // Auto-refresh every 20 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchNews();
+    }, 20000);
+
+    return () => clearInterval(interval);
+  }, [newsCategory]);
+
+  // Detect alerts whenever news updates
+  useEffect(() => {
+    if (news.length > 0) {
+      const detectedAlerts = AlertDetector.detectAlerts(news);
+      // Limit to 3 most recent alerts
+      const limitedAlerts = detectedAlerts.slice(0, 3);
+      setAlerts(limitedAlerts);
+    }
+  }, [news]);
+
+  const dismissAlert = (alertId: string) => {
+    setAlerts(prev => prev.filter(alert => alert.id !== alertId));
+  };
 
   useEffect(() => {
     fetchNews();
@@ -1771,6 +1797,7 @@ const NewsIntelligence: React.FC = () => {
       } else {
         setNews(formattedNews);
       }
+      setLastRefresh(new Date());
     } catch (error) {
       console.error('Error fetching news:', error);
       // Fallback to mock data if API fails
@@ -1792,11 +1819,60 @@ const NewsIntelligence: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Floating Alert Notifications */}
+      <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
+        {alerts.map((alert, index) => (
+          <motion.div
+            key={alert.id}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            transition={{ delay: index * 0.1 }}
+            className="bg-white border-l-4 p-4 rounded-lg shadow-lg"
+            style={{ borderLeftColor: AlertDetector.getImpactColor(alert.impact) }}
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-1">
+                  <span className="text-lg">{AlertDetector.getImpactIcon(alert.impact)}</span>
+                  <span className={`text-xs font-semibold uppercase`} style={{ color: AlertDetector.getImpactColor(alert.impact) }}>
+                    {alert.impact} impact
+                  </span>
+                </div>
+                <h4 className="font-semibold text-gray-900 text-sm mb-1">{alert.title}</h4>
+                <p className="text-xs text-gray-600 mb-2">{alert.summary}</p>
+                <div className="flex items-center space-x-2 text-xs text-gray-500">
+                  <span>{alert.source}</span>
+                  <span>•</span>
+                  <span>{new Date(alert.detectedAt).toLocaleTimeString()}</span>
+                </div>
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {alert.keywords.slice(0, 3).map((keyword, i) => (
+                    <span key={i} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <button
+                onClick={() => dismissAlert(alert.id)}
+                className="ml-2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">News Intelligence</h1>
           <p className="text-gray-600 mt-1">AI-powered sentiment analysis & market impact</p>
+          <p className="text-xs text-gray-500 mt-1">
+            Last refreshed: {lastRefresh.toLocaleTimeString()} • Auto-refresh every 20s
+          </p>
         </div>
         <div className="flex items-center space-x-3">
           <select
