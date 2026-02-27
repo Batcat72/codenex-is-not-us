@@ -1269,6 +1269,23 @@ const LearningModule: React.FC = () => {
                   </Button>
                 </div>
               </div>
+              
+              {/* Video Player */}
+              {selectedLesson.videoUrl && (
+                <div className="mb-8">
+                  <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                    <iframe
+                      src={selectedLesson.videoUrl}
+                      title={selectedLesson.title}
+                      className="absolute inset-0 w-full h-full"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              )}
+              
               <div className="prose max-w-none">
                 <p className="text-lg text-gray-700 leading-relaxed">{selectedLesson.content}</p>
                 <div className="mt-8 p-6 bg-blue-50 rounded-lg">
