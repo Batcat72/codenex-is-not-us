@@ -1465,32 +1465,22 @@ const LearningModule: React.FC = () => {
                   <p className="text-gray-600">{selectedLesson.duration}</p>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button variant="outline">
-                    <Play className="w-4 h-4 mr-2" />
-                    Watch Video
-                  </Button>
+                  {selectedLesson.videoUrl && (
+                    <Button 
+                      variant="outline" 
+                      onClick={() => window.open(selectedLesson.videoUrl, '_blank')}
+                      className="flex items-center"
+                    >
+                      <Play className="w-4 h-4 mr-2" />
+                      Watch Video
+                    </Button>
+                  )}
                   <Button onClick={() => setActiveQuiz(quizzes.find(q => q.lessonId === selectedLesson.id) || null)}>
                     <Award className="w-4 h-4 mr-2" />
                     Take Quiz
                   </Button>
                 </div>
               </div>
-              
-              {/* Video Player */}
-              {selectedLesson.videoUrl && (
-                <div className="mb-8">
-                  <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                    <iframe
-                      src={selectedLesson.videoUrl}
-                      title={selectedLesson.title}
-                      className="absolute inset-0 w-full h-full"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
-                </div>
-              )}
               
               <div className="prose max-w-none">
                 <p className="text-lg text-gray-700 leading-relaxed">{selectedLesson.content}</p>
