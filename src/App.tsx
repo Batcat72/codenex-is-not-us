@@ -330,10 +330,9 @@ const generateCourses = (): Course[] => [
     duration: '4 hours',
     progress: 75,
     lessons: [
-      { id: 'lesson-1-1', courseId: 'course-1', title: 'What is a Stock?', content: 'A stock represents ownership in a company...', duration: '15 min', order: 1, completed: true },
-      { id: 'lesson-1-2', courseId: 'course-1', title: 'How Stock Markets Work', content: 'Stock markets are exchanges where shares are traded...', duration: '20 min', order: 2, completed: true },
-      { id: 'lesson-1-3', courseId: 'course-1', title: 'Types of Orders', content: 'Market orders, limit orders, and stop orders...', duration: '25 min', order: 3, completed: true },
-      { id: 'lesson-1-4', courseId: 'course-1', title: 'Reading Stock Charts', content: 'Understanding candlestick patterns and technical indicators...', duration: '30 min', order: 4, completed: false },
+      { id: 'lesson-1-1', courseId: 'course-1', title: 'What is a Stock?', content: 'A stock represents ownership...', duration: '15 min', order: 1, completed: true, videoUrl: 'https://www.youtube.com/embed/kTxx_Jpnpn0' },
+      { id: 'lesson-1-2', courseId: 'course-1', title: 'Types of Stocks', content: 'There are different types...', duration: '12 min', order: 2, videoUrl: 'https://youtu.be/T37YvxMTofc?si=SHI3H2A3klhZbU_A' },
+      { id: 'lesson-1-3', courseId: 'course-1', title: 'Stock Market Basics', content: 'The stock market works...', duration: '18 min', order: 3, videoUrl: 'https://youtu.be/_rnyPa7w3Io?si=51g1vErr_HS1TFNw' }
     ]
   },
   {
@@ -345,9 +344,9 @@ const generateCourses = (): Course[] => [
     duration: '6 hours',
     progress: 40,
     lessons: [
-      { id: 'lesson-2-1', courseId: 'course-2', title: 'Support and Resistance', content: 'Learn to identify key price levels...', duration: '25 min', order: 1, completed: true },
-      { id: 'lesson-2-2', courseId: 'course-2', title: 'Moving Averages', content: 'Understanding SMA, EMA, and their trading signals...', duration: '30 min', order: 2, completed: true },
-      { id: 'lesson-2-3', courseId: 'course-2', title: 'RSI and Momentum', content: 'Using RSI, MACD, and other momentum indicators...', duration: '35 min', order: 3, completed: false },
+      { id: 'lesson-2-1', courseId: 'course-2', title: 'Support and Resistance', content: 'Learn to identify key price levels...', duration: '15 min', order: 1, completed: true, videoUrl: 'https://youtu.be/WtunB3RhqBk?si=dBYueRCIB8yfMsJI' },
+      { id: 'lesson-2-2', courseId: 'course-2', title: 'Moving Averages', content: 'Understanding SMA, EMA, and their trading signals...', duration: '12 min', order: 2, videoUrl: 'https://youtu.be/IvvUbh-cnX4?si=SGSTb2c34f24Ebry' },
+      { id: 'lesson-2-3', courseId: 'course-2', title: 'RSI and Momentum', content: 'Using RSI, MACD, and other momentum indicators...', duration: '18 min', order: 3, videoUrl: 'https://youtu.be/hbcCykbX14U?si=2QPhBXPJsq10f1mc' }
     ]
   },
   {
@@ -359,8 +358,8 @@ const generateCourses = (): Course[] => [
     duration: '8 hours',
     progress: 15,
     lessons: [
-      { id: 'lesson-3-1', courseId: 'course-3', title: 'Introduction to ML in Finance', content: 'How machine learning transforms investing...', duration: '30 min', order: 1, completed: true },
-      { id: 'lesson-3-2', courseId: 'course-3', title: 'Predictive Models', content: 'Understanding LSTM, regression, and classification...', duration: '45 min', order: 2, completed: false },
+      { id: 'lesson-3-1', courseId: 'course-3', title: 'Introduction to ML in Finance', content: 'How machine learning transforms investing...', duration: '15 min', order: 1, completed: true, videoUrl: 'https://youtu.be/Fa_V9fP2tpU?si=rcNFPT_GBm2i7ati' },
+      { id: 'lesson-3-2', courseId: 'course-3', title: 'Predictive Models', content: 'Understanding LSTM, regression, and classification...', duration: '12 min', order: 2, videoUrl: 'https://youtu.be/YCzL96nL7j0?si=R3BLGYwAGafqIBM1' }
     ]
   }
 ];
