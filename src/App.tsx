@@ -1128,6 +1128,167 @@ const LearningModule: React.FC = () => {
         },
       ]
     },
+    {
+      id: 'quiz-2',
+      lessonId: 'lesson-1-2',
+      title: 'Types of Stocks',
+      timeLimit: 240,
+      passingScore: 70,
+      questions: [
+        {
+          id: 'q4',
+          text: 'What is the difference between common and preferred stock?',
+          options: ['Preferred stock has voting rights', 'Common stock pays fixed dividends', 'Preferred stock has priority in dividends', 'Common stock is always more expensive'],
+          correctAnswer: 2,
+          explanation: 'Preferred stockholders have priority in receiving dividends and assets in liquidation.'
+        },
+        {
+          id: 'q5',
+          text: 'Which type of stock typically offers growth potential?',
+          options: ['Preferred Stock', 'Common Stock', 'Treasury Stock', 'Restricted Stock'],
+          correctAnswer: 1,
+          explanation: 'Common stock typically offers greater growth potential through capital appreciation.'
+        },
+      ]
+    },
+    {
+      id: 'quiz-3',
+      lessonId: 'lesson-1-3',
+      title: 'Stock Market Basics',
+      timeLimit: 300,
+      passingScore: 70,
+      questions: [
+        {
+          id: 'q6',
+          text: 'What does IPO stand for?',
+          options: ['Initial Public Offering', 'International Private Organization', 'Investment Portfolio Option', 'Internal Price Order'],
+          correctAnswer: 0,
+          explanation: 'IPO stands for Initial Public Offering, when a company first sells stock to the public.'
+        },
+        {
+          id: 'q7',
+          text: 'What is a stock index?',
+          options: ['A single stock price', 'A measure of stock market performance', 'A type of stock', 'A trading strategy'],
+          correctAnswer: 1,
+          explanation: 'A stock index is a statistical measure that tracks the performance of a group of stocks.'
+        },
+      ]
+    },
+    {
+      id: 'quiz-4',
+      lessonId: 'lesson-2-1',
+      title: 'Support and Resistance',
+      timeLimit: 300,
+      passingScore: 70,
+      questions: [
+        {
+          id: 'q8',
+          text: 'What is support level in technical analysis?',
+          options: ['A price ceiling', 'A price floor where buying pressure overcomes selling pressure', 'A trend line', 'A trading volume indicator'],
+          correctAnswer: 1,
+          explanation: 'Support is a price level where buying pressure is strong enough to overcome selling pressure.'
+        },
+        {
+          id: 'q9',
+          text: 'What happens when a stock price breaks through resistance?',
+          options: ['It always falls back down', 'It may continue rising with new resistance level', 'It becomes worthless', 'It triggers a sell signal'],
+          correctAnswer: 1,
+          explanation: 'When price breaks through resistance, it often continues rising to a new resistance level.'
+        },
+      ]
+    },
+    {
+      id: 'quiz-5',
+      lessonId: 'lesson-2-2',
+      title: 'Moving Averages',
+      timeLimit: 240,
+      passingScore: 70,
+      questions: [
+        {
+          id: 'q10',
+          text: 'What is the main difference between SMA and EMA?',
+          options: ['SMA uses only closing prices', 'EMA gives more weight to recent prices', 'SMA is faster than EMA', 'EMA is calculated weekly'],
+          correctAnswer: 1,
+          explanation: 'EMA (Exponential Moving Average) gives more weight to recent prices, making it more responsive.'
+        },
+        {
+          id: 'q11',
+          text: 'What does a golden cross indicate?',
+          options: ['Death signal', 'Bullish signal when short-term MA crosses above long-term MA', 'Bearish signal', 'Market crash'],
+          correctAnswer: 1,
+          explanation: 'A golden cross occurs when a short-term moving average crosses above a long-term moving average, signaling bullish momentum.'
+        },
+      ]
+    },
+    {
+      id: 'quiz-6',
+      lessonId: 'lesson-2-3',
+      title: 'RSI and Momentum',
+      timeLimit: 300,
+      passingScore: 70,
+      questions: [
+        {
+          id: 'q12',
+          text: 'What does RSI stand for?',
+          options: ['Relative Strength Index', 'Resistance Support Indicator', 'Real-time Stock Index', 'Risk Safety Index'],
+          correctAnswer: 0,
+          explanation: 'RSI stands for Relative Strength Index, a momentum oscillator.'
+        },
+        {
+          id: 'q13',
+          text: 'What RSI level typically indicates overbought conditions?',
+          options: ['Below 30', 'Above 70', 'Exactly 50', 'Below 20'],
+          correctAnswer: 1,
+          explanation: 'RSI above 70 typically indicates overbought conditions, suggesting a potential pullback.'
+        },
+      ]
+    },
+    {
+      id: 'quiz-7',
+      lessonId: 'lesson-3-1',
+      title: 'Introduction to ML in Finance',
+      timeLimit: 300,
+      passingScore: 70,
+      questions: [
+        {
+          id: 'q14',
+          text: 'What is machine learning in finance primarily used for?',
+          options: ['Only for trading bots', 'Predictive analysis and pattern recognition', 'Accounting purposes', 'Customer service only'],
+          correctAnswer: 1,
+          explanation: 'Machine learning in finance is primarily used for predictive analysis and pattern recognition.'
+        },
+        {
+          id: 'q15',
+          text: 'Which ML model is commonly used for time series prediction?',
+          options: ['Decision Trees', 'LSTM (Long Short-Term Memory)', 'K-Means', 'Random Forest'],
+          correctAnswer: 1,
+          explanation: 'LSTM networks are specifically designed for time series prediction due to their memory capabilities.'
+        },
+      ]
+    },
+    {
+      id: 'quiz-8',
+      lessonId: 'lesson-3-2',
+      title: 'Predictive Models',
+      timeLimit: 300,
+      passingScore: 70,
+      questions: [
+        {
+          id: 'q16',
+          text: 'What is backtesting in trading?',
+          options: ['Testing strategies on historical data', 'Backing up trading data', 'Testing internet connection', 'Creating backup strategies'],
+          correctAnswer: 0,
+          explanation: 'Backtesting involves testing trading strategies on historical data to evaluate performance.'
+        },
+        {
+          id: 'q17',
+          text: 'What is overfitting in ML models?',
+          options: ['When model is too simple', 'When model learns noise instead of patterns', 'When model is perfect', 'When model runs too fast'],
+          correctAnswer: 1,
+          explanation: 'Overfitting occurs when a model learns noise and random fluctuations instead of underlying patterns.'
+        },
+      ]
+    },
   ];
 
   const [activeQuiz, setActiveQuiz] = useState<Quiz | null>(null);
