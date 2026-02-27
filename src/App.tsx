@@ -888,6 +888,21 @@ const Navigation: React.FC<{ activeTab: string; onTabChange: (tab: string) => vo
   );
 };
 
+// Calculate realistic learning progress based on actual course data
+const calculateLearningProgress = () => {
+  const courses = generateCourses();
+  const totalLessons = courses.reduce((sum, course) => sum + course.lessons.length, 0);
+  const completedLessons = courses.reduce((sum, course) => 
+    sum + course.lessons.filter(lesson => lesson.completed).length, 0
+  );
+  return Math.round((completedLessons / totalLessons) * 100);
+};
+
+const calculateCourseProgress = (course: Course) => {
+  const completedLessons = course.lessons.filter(lesson => lesson.completed).length;
+  return Math.round((completedLessons / course.lessons.length) * 100);
+};
+
 // ============================================
 // DASHBOARD
 // ============================================
@@ -896,17 +911,45 @@ const Dashboard: React.FC<any> = ({ setActiveTab }) => {
   const { user } = useAuth();
   const courses = generateCourses();
   const portfolio = generatePortfolio();
-  const recentPredictions: Prediction[] = [
-    { id: 'pred-1', symbol: 'AAPL', direction: 'up', confidence: 78.5, targetPrice: 195, submittedAt: new Date(Date.now() - 3600000).toISOString(), actualDirection: 'up', accuracy: 100 },
-    { id: 'pred-2', symbol: 'TSLA', direction: 'down', confidence: 65.2, targetPrice: 230, submittedAt: new Date(Date.now() - 7200000).toISOString(), actualDirection: 'up', accuracy: 0 },
-    { id: 'pred-3', symbol: 'GOOGL', direction: 'up', confidence: 82.1, targetPrice: 155, submittedAt: new Date(Date.now() - 14400000).toISOString(), actualDirection: 'up', accuracy: 100 },
-  ];
+  
+  // Generate realistic predictions based on actual portfolio symbols
+  const generateRealisticPredictions = (): Prediction[] => {
+    const symbols = portfolio.map(item => item.symbol);
+    const directions: Array<'up' | 'down'> = ['up', 'down'];
+    const now = new Date();
+    
+    return symbols.slice(0, 5).map((symbol, index) => {
+      const direction = directions[Math.floor(Math.random() * directions.length)];
+      const confidence = Math.random() * 30 + 60; // 60-90%
+      const stock = portfolio.find(p => p.symbol === symbol);
+      const targetPrice = stock ? stock.currentPrice * (direction === 'up' ? 1.05 : 0.95) : Math.random() * 100 + 100;
+      const submittedAt = new Date(now.getTime() - (index + 1) * 3600000).toISOString();
+      const actualDirection = Math.random() > 0.4 ? direction : directions.find(d => d !== direction);
+      const accuracy = actualDirection === direction ? Math.random() * 20 + 80 : Math.random() * 30 + 10;
+      
+      return {
+        id: `pred-${index + 1}`,
+        symbol,
+        direction,
+        confidence: parseFloat(confidence.toFixed(1)),
+        targetPrice: parseFloat(targetPrice.toFixed(2)),
+        submittedAt,
+        actualDirection,
+        accuracy: parseFloat(accuracy.toFixed(0))
+      };
+    });
+  };
+  
+  const learningProgress = calculateLearningProgress();
+  const recentPredictions = generateRealisticPredictions();
+  const totalPredictions = Math.floor(Math.random() * 50) + 25; // 25-75 predictions
+  const avgAccuracy = recentPredictions.reduce((sum, pred) => sum + (pred.accuracy || 0), 0) / recentPredictions.length;
 
   const stats = [
-    { label: 'Learning Progress', value: '63%', icon: <BookOpen className="w-6 h-6" />, color: 'from-blue-500 to-blue-600' },
-    { label: 'Predictions Made', value: '47', icon: <Brain className="w-6 h-6" />, color: 'from-purple-500 to-purple-600' },
-    { label: 'Portfolio Value', value: '$28,822', icon: <DollarSign className="w-6 h-6" />, color: 'from-green-500 to-green-600' },
-    { label: 'Accuracy Rate', value: '67%', icon: <Target className="w-6 h-6" />, color: 'from-orange-500 to-orange-600' },
+    { label: 'Learning Progress', value: `${learningProgress}%`, icon: <BookOpen className="w-6 h-6" />, color: 'from-blue-500 to-blue-600' },
+    { label: 'Predictions Made', value: totalPredictions.toString(), icon: <Brain className="w-6 h-6" />, color: 'from-purple-500 to-purple-600' },
+    { label: 'Portfolio Value', value: `$${portfolio.reduce((sum, item) => sum + item.marketValue, 0).toLocaleString()}`, icon: <DollarSign className="w-6 h-6" />, color: 'from-green-500 to-green-600' },
+    { label: 'Accuracy Rate', value: `${Math.round(avgAccuracy)}%`, icon: <Target className="w-6 h-6" />, color: 'from-orange-500 to-orange-600' },
   ];
 
   return (
@@ -1008,9 +1051,9 @@ const Dashboard: React.FC<any> = ({ setActiveTab }) => {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Progress</span>
-                      <span className="font-medium">{course.progress}%</span>
+                      <span className="font-medium">{calculateCourseProgress(course)}%</span>
                     </div>
-                    <ProgressBar value={course.progress} />
+                    <ProgressBar value={calculateCourseProgress(course)} />
                   </div>
                 </div>
               </Card>
@@ -1096,6 +1139,8 @@ const LearningModule: React.FC = () => {
   const courses = generateCourses();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+
+  const overallProgress = calculateLearningProgress();
 
   const quizzes: Quiz[] = [
     {
